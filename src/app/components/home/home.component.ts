@@ -4,11 +4,13 @@ import { Window } from "@tauri-apps/api/window"
 import { Webview } from "@tauri-apps/api/webview"
 import { WebviewWindow } from '@tauri-apps/api/webviewWindow';
 import { RegataComponent } from '../regata/regata.component';
+import { HeaderComponent } from '../header/header.component';
+import { EditRegataComponent } from '../edit-regata/edit-regata.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RegataComponent],
+  imports: [RegataComponent, HeaderComponent, EditRegataComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
