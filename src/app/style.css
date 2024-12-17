@@ -1,4 +1,5 @@
-div[data-bs-theme="dark"] {
+
+body {
     background-color: var(--bs-body-bg);
     color: var(--bs-body-color);
 }
