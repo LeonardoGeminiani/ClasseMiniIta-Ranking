@@ -4,7 +4,6 @@ use sqlx::prelude::FromRow;
 
 use crate::AppState;
 
-
 #[derive(Debug, Serialize, Deserialize, sqlx::Type)]
 pub enum CrewCoef {
     SOLO,
@@ -88,15 +87,17 @@ pub async fn add_race(
 ) -> Result<i32 /*race id*/, String> {
     let db = &state.db;
 
-   let inserted: Vec<RaceDTO> =  sqlx::query_as::<_, RaceDTO>("INSERT INTO races (name, N, E, D) VALUES (?1, ?2, ?3, ?4) RETURNING *")
-        .bind(name)
-        .bind(n)
-        .bind(e as i8)
-        .bind(d as i8)
-        .fetch(db)
-        .try_collect()
-        .await
-        .map_err(|e| format!("Error saving todo: {}", e))?;
+    let inserted: Vec<RaceDTO> = sqlx::query_as::<_, RaceDTO>(
+        "INSERT INTO races (name, N, E, D) VALUES (?1, ?2, ?3, ?4) RETURNING *",
+    )
+    .bind(name)
+    .bind(n)
+    .bind(e as i8)
+    .bind(d as i8)
+    .fetch(db)
+    .try_collect()
+    .await
+    .map_err(|e| format!("Error saving todo: {}", e))?;
     Ok(inserted[0].raceId)
 }
 
@@ -126,13 +127,15 @@ pub async fn add_skipper(
 ) -> Result<i32 /*skipper Id */, String> {
     let db = &state.db;
 
-    let inserted: Vec<Skipper> = sqlx::query_as::<_, Skipper>("INSERT INTO skippers (name, surname) VALUES (?1, ?2) RETURNING *")
-        .bind(name)
-        .bind(surname)
-        .fetch(db)
-        .try_collect()
-        .await
-        .map_err(|e| format!("Error saving todo: {}", e))?;
+    let inserted: Vec<Skipper> = sqlx::query_as::<_, Skipper>(
+        "INSERT INTO skippers (name, surname) VALUES (?1, ?2) RETURNING *",
+    )
+    .bind(name)
+    .bind(surname)
+    .fetch(db)
+    .try_collect()
+    .await
+    .map_err(|e| format!("Error saving todo: {}", e))?;
     Ok(inserted[0].skipperId)
 }
 
@@ -147,4 +150,99 @@ pub async fn get_skippers(state: tauri::State<'_, AppState>) -> Result<Vec<Skipp
         .map_err(|e| format!("Failed to get races {}", e))?;
 
     Ok(races)
+}
+
+#[derive(Debug, Serialize, Deserialize, FromRow)]
+pub struct SoloRacePosition {
+    raceId: i32,
+    skipperId: i32,
+    position: i32,
+}
+
+#[derive(Debug, Serialize, Deserialize, FromRow)]
+pub struct DoubleRacePosition {
+    raceId: i32,
+    skipperId: i32,
+    CoSkipperId: i32,
+    position: i32,
+}
+
+#[tauri::command]
+pub async fn add_soloSerie(
+    state: tauri::State<'_, AppState>,
+    raceId: i32,
+    skipperId: i32,
+    position: i32,
+) -> Result<(), String> {
+    let db = &state.db;
+
+    sqlx::query("INSERT INTO soloSerie (raceId, skipperId, position) VALUES (?1, ?2, ?3)")
+        .bind(raceId)
+        .bind(skipperId)
+        .bind(position)
+        .execute(db)
+        .await
+        .map_err(|e| format!("Error saving todo: {}", e))?;
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn add_soloProto(
+    state: tauri::State<'_, AppState>,
+    raceId: i32,
+    skipperId: i32,
+    position: i32,
+) -> Result<(), String> {
+    let db = &state.db;
+
+    sqlx::query("INSERT INTO soloProto (raceId, skipperId, position) VALUES (?1, ?2, ?3)")
+        .bind(raceId)
+        .bind(skipperId)
+        .bind(position)
+        .execute(db)
+        .await
+        .map_err(|e| format!("Error saving todo: {}", e))?;
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn add_doubleSerie(
+    state: tauri::State<'_, AppState>,
+    raceId: i32,
+    skipperId: i32,
+    coSkipperId: i32,
+    position: i32,
+) -> Result<(), String> {
+    let db = &state.db;
+
+    sqlx::query("INSERT INTO DoubleSerie (raceId, skipperId, CoSkipperId, position) VALUES (?1, ?2, ?3, ?4)")
+        .bind(raceId)
+        .bind(skipperId)
+        .bind(coSkipperId)
+        .bind(position)
+        .execute(db)
+        .await
+        .map_err(|e| format!("Error saving todo: {}", e))?;
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn add_doubleProto(
+    state: tauri::State<'_, AppState>,
+    raceId: i32,
+    skipperId: i32,
+    coSkipperId: i32,
+    position: i32,
+) -> Result<(), String> {
+    let db = &state.db;
+
+    sqlx::query("INSERT INTO DoubleProto (raceId, skipperId, CoSkipperId, position) VALUES (?1, ?2, ?3, ?4)")
+        .bind(raceId)
+        .bind(skipperId)
+        .bind(coSkipperId)
+        .bind(position)
+        .execute(db)
+        .await
+        .map_err(|e| format!("Error saving todo: {}", e))?;
+    Ok(())
 }
