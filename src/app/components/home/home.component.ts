@@ -3,6 +3,7 @@ import { RegataComponent } from '../regata/regata.component';
 import { HeaderComponent } from '../header/header.component';
 import { EditRegataComponent } from '../edit-regata/edit-regata.component';
 import Database from '@tauri-apps/plugin-sql';
+import { invoke } from '@tauri-apps/api/core';
 
 @Component({
   selector: 'app-home',
@@ -15,10 +16,16 @@ export class HomeComponent {
   async ngOnInit() {
     // when using `"withGlobalTauri": true`, you may use
     // const Database = window.__TAURI__.sql;
-    
-    const db = await Database.load('sqlite:data.db');
 
-    await db.select("SELECT * from races");
-    //db.execute('INSETS into users (id, name) VALUES ($1, $2)', [1,'2'])
+    // const db = await Database.load('sqlite:data.db');
+
+    // await db.select("SELECT * from races");
+    // //db.execute('INSETS into users (id, name) VALUES ($1, $2)', [1,'2'])
+    return await invoke("add_race", {
+      name: 'arci',
+      n: 8,
+      e: 0,
+      d: 1
+    });
   }
 }

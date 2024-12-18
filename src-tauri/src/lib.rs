@@ -15,7 +15,9 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_sql::Builder::new().build())
         .plugin(tauri_plugin_opener::init())
-        
+        .invoke_handler(tauri::generate_handler![
+            add_race, add_skipper
+        ])
         .setup(|app| {
             tauri::async_runtime::block_on(
                 async move {
@@ -71,3 +73,28 @@ async fn setup_db(app: &App) -> Db {
 }
 
 
+#[tauri::command]
+async fn add_race(state: tauri::State<'_, AppState>, name: &str, n: i32, e: i32, d: i32) -> Result<(), String> {
+    let db = &state.db;
+
+    sqlx::query("INSERT INTO races (name, N, E, D) VALUES (?1, ?2, ?3, ?4)")
+        .bind(name)
+        .bind(n).bind(e).bind(d)
+        .execute(db)
+        .await
+        .map_err(|e| format!("Error saving todo: {}", e))?;
+    Ok(())
+}
+
+#[tauri::command]
+async fn add_skipper(state: tauri::State<'_, AppState>, name: &str, surname: &str) -> Result<(), String> {
+    let db = &state.db;
+
+    sqlx::query("INSERT INTO skippers (name, surname) VALUES (?1, ?2)")
+        .bind(name)
+        .bind(surname)
+        .execute(db)
+        .await
+        .map_err(|e| format!("Error saving todo: {}", e))?;
+    Ok(())
+}
