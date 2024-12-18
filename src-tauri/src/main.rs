@@ -2,5 +2,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 fn main() {
-    classeminiita_ranking_lib::run()
+    classeminiita_ranking_lib::run();
 }

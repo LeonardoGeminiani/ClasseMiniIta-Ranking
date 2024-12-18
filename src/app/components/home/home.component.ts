@@ -1,11 +1,8 @@
 import { Component } from '@angular/core';
-import { invoke } from '@tauri-apps/api/core';
-import { Window } from "@tauri-apps/api/window"
-import { Webview } from "@tauri-apps/api/webview"
-import { WebviewWindow } from '@tauri-apps/api/webviewWindow';
 import { RegataComponent } from '../regata/regata.component';
 import { HeaderComponent } from '../header/header.component';
 import { EditRegataComponent } from '../edit-regata/edit-regata.component';
+import Database from '@tauri-apps/plugin-sql';
 
 @Component({
   selector: 'app-home',
@@ -15,15 +12,13 @@ import { EditRegataComponent } from '../edit-regata/edit-regata.component';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-  clickFunc() {
-    const webview = new WebviewWindow('my-label', {
-      url: '#'
-    });
+  async ngOnInit() {
+    // when using `"withGlobalTauri": true`, you may use
+    // const Database = window.__TAURI__.sql;
     
-    webview.once('tauri://error', function (e) {
-      // an error happened creating the webview
-      console.error(e)
-     });
-    //invoke("create_window");
+    const db = await Database.load('sqlite:data.db');
+
+    await db.select("SELECT * from users");
+    //db.execute('INSETS into users (id, name) VALUES ($1, $2)', [1,'2'])
   }
 }
