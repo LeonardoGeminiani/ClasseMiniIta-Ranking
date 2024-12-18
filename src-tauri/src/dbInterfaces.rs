@@ -85,18 +85,19 @@ pub async fn add_race(
     n: i32,
     e: CrewCoef,
     d: DistanceCoef,
-) -> Result<(), String> {
+) -> Result<i32 /*race id*/, String> {
     let db = &state.db;
 
-    sqlx::query("INSERT INTO races (name, N, E, D) VALUES (?1, ?2, ?3, ?4)")
+   let inserted: Vec<RaceDTO> =  sqlx::query_as::<_, RaceDTO>("INSERT INTO races (name, N, E, D) VALUES (?1, ?2, ?3, ?4) RETURNING *")
         .bind(name)
         .bind(n)
         .bind(e as i8)
         .bind(d as i8)
-        .execute(db)
+        .fetch(db)
+        .try_collect()
         .await
         .map_err(|e| format!("Error saving todo: {}", e))?;
-    Ok(())
+    Ok(inserted[0].raceId)
 }
 
 #[tauri::command]
@@ -122,16 +123,17 @@ pub async fn add_skipper(
     state: tauri::State<'_, AppState>,
     name: &str,
     surname: &str,
-) -> Result<(), String> {
+) -> Result<i32 /*skipper Id */, String> {
     let db = &state.db;
 
-    sqlx::query("INSERT INTO skippers (name, surname) VALUES (?1, ?2)")
+    let inserted: Vec<Skipper> = sqlx::query_as::<_, Skipper>("INSERT INTO skippers (name, surname) VALUES (?1, ?2) RETURNING *")
         .bind(name)
         .bind(surname)
-        .execute(db)
+        .fetch(db)
+        .try_collect()
         .await
         .map_err(|e| format!("Error saving todo: {}", e))?;
-    Ok(())
+    Ok(inserted[0].skipperId)
 }
 
 #[tauri::command]

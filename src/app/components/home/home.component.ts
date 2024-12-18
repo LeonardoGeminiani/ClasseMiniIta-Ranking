@@ -15,16 +15,18 @@ import { invoke } from '@tauri-apps/api/core';
 export class HomeComponent {
   async ngOnInit() {
 
-    // return await invoke("add_race", {
-    //   name: 'arci',
-    //   n: 8,
-    //   e: 'DOUBLE',
-    //   d: 'B'
-    // });
-
-    let races = await invoke('get_races') as Array<any>;
-    races.forEach(el => {
-      console.log(el);
+    let a = await invoke("add_race", {
+      name: 'arci',
+      n: 15,
+      e: 'DOUBLE',
+      d: 'C'
     });
+
+    console.log(a);
+
+    // let races = await invoke('get_races') as Array<any>;
+    // races.forEach(el => {
+    //   console.log(el);
+    // });
   }
 }
