@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { EditRegataComponent } from '../edit-regata/edit-regata.component';
 import Database from '@tauri-apps/plugin-sql';
@@ -19,7 +19,7 @@ export class HomeComponent {
   /**
    *
    */
-  constructor(public db: DbService) {
+  constructor(public db: DbService, private changeDetection: ChangeDetectorRef) {
   }
 
   public raceList: Race[] = [];
@@ -28,9 +28,12 @@ export class HomeComponent {
   ngOnInit() {
     this.subscription = this.db.raceList$.subscribe(value => {
       this.raceList = value;
-      console.log("value updated!!");
+      console.log("value updated!!", this.raceList);
+      // refresh page
+      this.changeDetection.detectChanges();
     });
   }
+
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();

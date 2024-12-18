@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { invoke } from "@tauri-apps/api/core";
 import { HeaderComponent } from './components/header/header.component';
+import { DbService } from './services/db.service';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +23,14 @@ export class AppComponent {
   //     this.greetingMessage = text;
   //   });
   // }
+  /**
+   *
+   */
+  constructor(private db: DbService) { }
 
+  async ngOnInit() {
+    this.db.initializeApp();
+  }
   
 // }
 }

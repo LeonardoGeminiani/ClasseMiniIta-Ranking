@@ -8,7 +8,7 @@ use dbInterfaces::{
 };
 use sqlx::{migrate::MigrateDatabase, sqlite::SqlitePoolOptions, Pool, Sqlite};
 use std::convert::From;
-use tauri::{App, Manager as _};
+use tauri::{App, Emitter, Manager as _};
 
 mod dbInterfaces;
 
@@ -32,7 +32,8 @@ pub fn run() {
             add_soloProto,
             add_soloSerie,
             add_doubleSerie,
-            add_doubleProto
+            add_doubleProto,
+            syncMultipleWindows
         ])
         .setup(|app| {
             tauri::async_runtime::block_on(async move {
@@ -43,6 +44,12 @@ pub fn run() {
         })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
+}
+
+
+#[tauri::command]
+fn syncMultipleWindows(app: tauri::AppHandle, webview_window: tauri::WebviewWindow){
+    let _ = app.emit("raceList", webview_window.label());
 }
 
 async fn setup_db(app: &App) -> Db {
