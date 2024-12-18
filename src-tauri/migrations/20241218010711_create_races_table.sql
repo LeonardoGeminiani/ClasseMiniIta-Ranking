@@ -4,7 +4,6 @@ CREATE TABLE races (
     N INTEGER NOT NULL,
     E INT8 NOT NULL,
     D INT8 NOT NULL
-    status VARCHAR(30)
 );
 
 

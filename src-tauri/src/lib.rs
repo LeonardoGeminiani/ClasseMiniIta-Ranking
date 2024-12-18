@@ -1,8 +1,6 @@
 // use tauri::{utils::config::WindowConfig, window, Manager, WebviewUrl};
 
-use futures::TryStreamExt;
-use serde::{Deserialize, Serialize};
-use sqlx::{migrate::MigrateDatabase, prelude::FromRow, sqlite::SqlitePoolOptions, Pool, Sqlite};
+use sqlx::{migrate::MigrateDatabase, sqlite::SqlitePoolOptions, Pool, Sqlite};
 use tauri::{App, Manager as _};
 
 type Db = Pool<Sqlite>;
@@ -32,8 +30,13 @@ pub fn run() {
 
 
 async fn setup_db(app: &App) -> Db {
+    
     let mut path = app.path().app_data_dir().expect("failed to get data_dir");
 
+    // UNCOMMENT TO PRINT DB PATH
+    // let tmp = path.clone();
+    // println!("{}", tmp.into_os_string().into_string().unwrap());
+    
     match std::fs::create_dir_all(path.clone()) {
         Ok(_) => {}
         Err(err) => {
@@ -58,7 +61,11 @@ async fn setup_db(app: &App) -> Db {
         .await
         .unwrap();
 
-    sqlx::migrate!("./migrations").run(&db).await.unwrap();
+    let res = sqlx::migrate!("./migrations").run(&db).await;
+
+    if let Err(res) = res {
+        println!("{}", res);
+    }
 
     db
 }

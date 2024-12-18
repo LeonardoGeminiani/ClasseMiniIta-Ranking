@@ -18,7 +18,7 @@ export class HomeComponent {
     
     const db = await Database.load('sqlite:data.db');
 
-    await db.select("SELECT * from users");
+    await db.select("SELECT * from races");
     //db.execute('INSETS into users (id, name) VALUES ($1, $2)', [1,'2'])
   }
 }
