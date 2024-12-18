@@ -41,10 +41,12 @@ export class EditRegataComponent {
     }
   }
 
-  constructor(public db: DbService, private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private db: DbService) {
     this.form = this.formBuilder.group({
+      name: ['', Validators.required],
       N: ['', [this.numberValidator()]],
-      name: ['', Validators.required]
+      E : [CrewCoef[CrewCoef.SOLO]],
+      D : [DistanceCoef[DistanceCoef.C]]
     });
   }
 
@@ -72,8 +74,10 @@ export class EditRegataComponent {
 
   submitForm() {
     this.submitted = true;
-    if (this.form?.valid) {
-
+    if (this.form.valid) {
+      let {name, N, E, D} = this.form.value;
+      console.log(name, Number(N), E, D);
+      this.db.add_race(name, Number(N), E, D)
     } else {
       console.error("invalid form");
     }

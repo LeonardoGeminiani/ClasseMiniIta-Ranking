@@ -1,7 +1,7 @@
 <app-header></app-header>
 <app-edit-regata></app-edit-regata>
 <div class="container-lg">
-    <div *ngFor="let i of this.db.raceList" class="card regata mb-4">
+    <div *ngFor="let i of this.raceList.reverse()" class="card regata mb-4">
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <h3> {{i.name}} </h3>

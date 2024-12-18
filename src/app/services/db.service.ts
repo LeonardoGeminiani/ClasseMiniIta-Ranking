@@ -1,20 +1,31 @@
 import { Injectable } from '@angular/core';
 import { CrewCoef, DistanceCoef, Race } from '../models/race';
 import { invoke } from '@tauri-apps/api/core';
-
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DbService {
-  raceList: Race[] = [];
+  private raceList = new BehaviorSubject<Race[]>([]);
+  raceList$ = this.raceList.asObservable();
+
+  private setRaceList(val: Race[]): void {
+    this.raceList.next(val);
+  }
+
+  private getRaceList(): Race[] {
+    return this.raceList.getValue();
+  }
 
   async get_races() {
     let races = await invoke('get_races') as Array<any>;
 
-    this.raceList = [];
+    this.setRaceList([]);
+
+    let tmp: Race[] = [];
     races.forEach(el => {
-      this.raceList.push({
+      tmp.push({
         raceId: el.race_id,
         name: el.name,
         N: el.n,
@@ -22,6 +33,8 @@ export class DbService {
         D: el.d
       })
     });
+
+    this.setRaceList(tmp);
   }
 
   async add_race(name: string, n: number, e: CrewCoef, d: DistanceCoef) {
