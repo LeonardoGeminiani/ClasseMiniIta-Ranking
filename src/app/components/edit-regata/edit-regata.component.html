@@ -1,94 +1,103 @@
 <div class="container-sm p-3">
-    <div class="form-floating mb-3">
-        <input type="email" class="form-control" id="floatingInput" placeholder="Nome della regata">
-        <label for="floatingInput">Nome della regata</label>
-    </div>
+    <form [formGroup]="form" (ngSubmit)="submitForm()">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="name" placeholder="Nome della regata" formControlName="name" required>
+            <label for="floatingInput">Nome della regata</label>
 
-    <div class="d-flex justify-content-between mb-3">
-        <div>
-            <div class="input-group">
-                <span class="input-group-text">N</span>
-                <input type="number" min="0" class="form-control" placeholder="...">
-            </div>
-
-            <div class="form-text">
-                Numero di barche alla partenza
+            <div *ngIf="this.submitted && form.controls['name'].invalid" class="text-danger">
+                Nome della regata richiesto...
             </div>
         </div>
-        <div class="mx-3">
-            <div class="input-group">
-                <span class="input-group-text">E</span>
 
-                <select class="form-select">
-                    <option value="DOUBLE">DOUBLE</option>
-                    <option value="SOLO">SOLO</option>
-                </select>
-            </div>
-
-            <div class="form-text">
-                Coefficiente Equipaggio
-            </div>
-        </div>
-        <div>
-            <div class="input-group">
-                <span class="input-group-text">D</span>
-
-                <select class="form-select">
-                    <option value="C">C</option>
-                    <option value="B">B</option>
-                    <option value="A">A</option>
-                </select>
-            </div>
-
-            <div class="form-text">
-                Coefficiente Distanza
-            </div>
-        </div>
-    </div>
-
-    <div class="card mb-3">
-        <div class="card-header">
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchSerie" checked
-                    (click)="collapse('Serie')">
-                <label class="form-check-label" for="flexSwitchSerie">
-                    Serie
-                </label>
-            </div>
-        </div>
-        <div class="card-body">
-            <div class="collapse show" #collapseSerie>
-                <label class="form-label">Classifica Serie</label>
+        <div class="d-flex justify-content-between mb-3">
+            <div>
                 <div class="input-group">
-                    <input type="file" class="form-control" aria-label="Upload">
+                    <span class="input-group-text">N</span>
+                    <input class="form-control" placeholder="..." formControlName="N">
+                </div>
+
+                <div *ngIf="this.submitted && form.controls['N'].hasError('notANumber')" class="text-danger">
+                    Numero di barche non valido...
+                </div>
+                
+                <div class="form-text">
+                    Numero di barche alla partenza
+                </div>
+            </div>
+            <div class="mx-3">
+                <div class="input-group">
+                    <span class="input-group-text">E</span>
+
+                    <select class="form-select">
+                        <option value="DOUBLE">DOUBLE</option>
+                        <option value="SOLO">SOLO</option>
+                    </select>
+                </div>
+
+                <div class="form-text">
+                    Coefficiente Equipaggio
+                </div>
+            </div>
+            <div>
+                <div class="input-group">
+                    <span class="input-group-text">D</span>
+
+                    <select class="form-select">
+                        <option value="C">C</option>
+                        <option value="B">B</option>
+                        <option value="A">A</option>
+                    </select>
+                </div>
+
+                <div class="form-text">
+                    Coefficiente Distanza
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="card mb-3">
-        <div class="card-header">
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchProto" checked
-                    (click)="collapse('Proto')">
-                <label class="form-check-label" for="flexSwitchProto">
-                    Proto
-                </label>
+        <div class="card mb-3">
+            <div class="card-header">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchSerie" checked
+                        (click)="collapse('Serie')">
+                    <label class="form-check-label" for="flexSwitchSerie">
+                        Serie
+                    </label>
+                </div>
             </div>
-        </div>
-        <div class="card-body">
-            <div class="collapse show" #collapseProto>
-
-                <label class="form-label">Classifica Proto</label>
-                <div class="input-group">
-                    <input type="file" class="form-control" aria-label="Upload">
+            <div class="card-body">
+                <div class="collapse show" #collapseSerie>
+                    <label class="form-label">Classifica Serie</label>
+                    <div class="input-group">
+                        <input type="file" class="form-control" aria-label="Upload">
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    
-    <div class="d-flex justify-content-end">
-        <button type="button" class="btn btn-primary">Aggiungi</button>
-    </div>
 
+        <div class="card mb-3">
+            <div class="card-header">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchProto" checked
+                        (click)="collapse('Proto')">
+                    <label class="form-check-label" for="flexSwitchProto">
+                        Proto
+                    </label>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="collapse show" #collapseProto>
+
+                    <label class="form-label">Classifica Proto</label>
+                    <div class="input-group">
+                        <input type="file" class="form-control" aria-label="Upload">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end">
+            <button type="button" type="submit" class="btn btn-primary">Aggiungi</button>
+        </div>
+    </form>
 </div>

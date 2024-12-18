@@ -1,9 +1,54 @@
 <app-header></app-header>
+<app-edit-regata></app-edit-regata>
 <div class="container-lg">
-    <app-regata></app-regata>
-    <app-regata></app-regata>
-    <app-regata></app-regata>
-    <app-regata></app-regata>
-    <app-regata></app-regata>
-    <app-regata></app-regata>
+    <div *ngFor="let i of this.db.raceList" class="card regata mb-4">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3> {{i.name}} </h3>
+                <button type="button" class="btn btn-primary edit">Modifica</button>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center m-3">
+            <div class="px-3">
+                <b>N:</b> {{i.N}}
+            </div>
+            <div class="px-3">
+                <b>E:</b> {{i.E}}
+            </div>
+            <div class="px-3">
+                <b>D:</b> {{i.D}}
+            </div>
+        </div>
+        <!-- <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <h5>Serie:</h5>
+                <div class="d-flex justify-content-center">
+                    <div class="px-3">
+                        <b>N:</b> 15
+                    </div>
+                    <div class="px-3">
+                        <b>E:</b> DOUBLE
+                    </div>
+                    <div class="px-3">
+                        <b>D:</b> C
+                    </div>
+                </div>
+            </li>
+    
+            <li class="list-group-item">
+                <h5>Proto:</h5>
+                <div class="d-flex justify-content-center">
+                    <div class="px-3">
+                        <b>N:</b> 15
+                    </div>
+                    <div class="px-3">
+                        <b>E:</b> DOUBLE
+                    </div>
+                    <div class="px-3">
+                        <b>D:</b> C
+                    </div>
+                </div>
+            </li>
+        </ul> -->
+    </div>
 </div>
