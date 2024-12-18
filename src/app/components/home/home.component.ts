@@ -14,18 +14,17 @@ import { invoke } from '@tauri-apps/api/core';
 })
 export class HomeComponent {
   async ngOnInit() {
-    // when using `"withGlobalTauri": true`, you may use
-    // const Database = window.__TAURI__.sql;
 
-    // const db = await Database.load('sqlite:data.db');
+    // return await invoke("add_race", {
+    //   name: 'arci',
+    //   n: 8,
+    //   e: 'DOUBLE',
+    //   d: 'B'
+    // });
 
-    // await db.select("SELECT * from races");
-    // //db.execute('INSETS into users (id, name) VALUES ($1, $2)', [1,'2'])
-    return await invoke("add_race", {
-      name: 'arci',
-      n: 8,
-      e: 0,
-      d: 1
+    let races = await invoke('get_races') as Array<any>;
+    races.forEach(el => {
+      console.log(el);
     });
   }
 }
