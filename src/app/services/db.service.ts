@@ -57,15 +57,12 @@ export class DbService {
   }
 
   public async initializeApp(): Promise<void> {
-    console.log('App Initialization Started');
     const unlisten = await listen('raceList', (event) => {
       const label = Window.getCurrent().label;
       if (label == event.payload) return;
-      console.log("receivef")
       this.get_only_races();
       console.log(this.raceList)
-    }) 
-    console.log('App Initialization Finished');
+    })
   }
 
   constructor() {   
