@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 
 <head>
     <meta charset="UTF-8">
 
 
+    <script type="module" src="/src/edit-regata.ts" defer></script>
     <link rel="stylesheet" href="/src/styles.css" />
     <link rel="stylesheet" type="text/css" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
     <script type="module" src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -14,11 +15,11 @@
     <div class="container-sm p-3">
         <form>
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="name" placeholder="Nome della regata" formControlName="name"
+                <input type="text" class="form-control" id="RaceName" placeholder="Nome della regata" formControlName="name"
                     required>
                 <label for="floatingInput">Nome della regata</label>
 
-                <div>
+                <div class="errorAlert text-danger d-none">
                     Nome della regata richiesto...
                 </div>
             </div>
@@ -27,10 +28,10 @@
                 <div>
                     <div class="input-group">
                         <span class="input-group-text">N</span>
-                        <input class="form-control" placeholder="..." formControlName="N">
+                        <input class="form-control" id="N" placeholder="..." >
                     </div>
 
-                    <div>
+                    <div class="errorAlert text-danger d-none">
                         Numero di barche non valido...
                     </div>
 
@@ -42,7 +43,7 @@
                     <div class="input-group">
                         <span class="input-group-text">E</span>
 
-                        <select class="form-select" formControlName="E">
+                        <select class="form-select" id="E">
                             <option value="DOUBLE">DOUBLE</option>
                             <option value="SOLO">SOLO</option>
                         </select>
@@ -56,7 +57,7 @@
                     <div class="input-group">
                         <span class="input-group-text">D</span>
 
-                        <select class="form-select" formControlName="D">
+                        <select class="form-select" id="D">
                             <option value="C">C</option>
                             <option value="B">B</option>
                             <option value="A">A</option>
@@ -111,7 +112,7 @@
             </div>
 
             <div class="d-flex justify-content-end">
-                <button type="button" type="submit" class="btn btn-primary">Aggiungi</button>
+                <button type="button" type="submit" class="btn btn-primary" id="add-regata-submit" >Aggiungi</button>
             </div>
         </form>
     </div>

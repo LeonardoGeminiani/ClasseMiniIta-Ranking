@@ -5,7 +5,7 @@ async function get_races() {
 
   let races = await invoke('get_races') as Array<any>;
 
-  races.forEach(el => {
+  races.reverse().forEach(el => {
     tmp += `
       <div class="card regata mb-4">
           <div class="card-header">
