@@ -28,12 +28,15 @@ async function onSubmit() {
 
     if (haserror) return;
 
-    await invoke("add_race", {
+    let raceId: number = await invoke("add_race", {
         name,
         n,
         e,
         d
     });
+
+    alert(raceId);
+    
 
     await invoke("sync_webviews");
     alert("ciao")
