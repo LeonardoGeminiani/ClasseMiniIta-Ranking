@@ -35,6 +35,7 @@ async function onSubmit() {
         d
     });
 
+    await invoke("sync_webviews");
     alert("ciao")
 }
 

@@ -7,7 +7,10 @@ use dbInterfaces::{
 };
 use sqlx::{migrate::MigrateDatabase, sqlite::SqlitePoolOptions, Pool, Sqlite};
 use std::convert::From;
-use tauri::{App, AppHandle, Emitter, Manager as _, WebviewUrl, WebviewWindowBuilder};
+use tauri::{
+    window, App, AppHandle, Emitter, EventTarget, Manager as _, WebviewUrl, WebviewWindow,
+    WebviewWindowBuilder, Window,
+};
 
 mod dbInterfaces;
 
@@ -31,7 +34,8 @@ pub fn run() {
             add_soloSerie,
             add_doubleSerie,
             add_doubleProto,
-            edit_regata_window
+            edit_regata_window,
+            sync_webviews
         ])
         .setup(|app| {
             tauri::async_runtime::block_on(async move {
@@ -57,6 +61,16 @@ fn edit_regata_window(app: AppHandle) -> tauri::Result<()> {
     .build()?;
 
     Ok(())
+}
+
+#[tauri::command]
+fn sync_webviews(app: AppHandle, window: Window) {
+    println!("{}", window.label());
+
+    let _ = app.emit_filter("sync_webviews", "sync", |target| match target {
+        EventTarget::WebviewWindow { label } => label != window.label(),
+        _ => true,
+    });
 }
 
 async fn setup_db(app: &App) -> Db {

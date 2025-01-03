@@ -1,4 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
+import { listen } from "@tauri-apps/api/event";
 
 async function get_races() {
   let tmp: string = "";
@@ -31,6 +32,13 @@ async function get_races() {
   document.getElementById("regataContainer")?.setHTMLUnsafe(tmp);
 }
 
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", async () => {
   get_races();
+
+  const unlisten = await listen('sync_webviews', (event) => {
+    console.log("sync received");
+
+    get_races();
+  });
+
 });

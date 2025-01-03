@@ -15,8 +15,8 @@
     <div class="container-sm p-3">
         <form>
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="RaceName" placeholder="Nome della regata" formControlName="name"
-                    required>
+                <input type="text" class="form-control" id="RaceName" placeholder="Nome della regata"
+                    formControlName="name" required>
                 <label for="floatingInput">Nome della regata</label>
 
                 <div class="errorAlert text-danger d-none">
@@ -28,7 +28,7 @@
                 <div>
                     <div class="input-group">
                         <span class="input-group-text">N</span>
-                        <input class="form-control" id="N" placeholder="..." >
+                        <input class="form-control" id="N" placeholder="...">
                     </div>
 
                     <div class="errorAlert text-danger d-none">
@@ -81,7 +81,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="collapse show" #collapseSerie>
+                    <div class="collapse show" id='collapseSerie'>
                         <label class="form-label">Classifica Serie</label>
                         <div class="input-group">
                             <input type="file" class="form-control" aria-label="Upload">
@@ -101,7 +101,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="collapse show" #collapseProto>
+                    <div class="collapse show" id='collapseProto'>
 
                         <label class="form-label">Classifica Proto</label>
                         <div class="input-group">
@@ -112,10 +112,38 @@
             </div>
 
             <div class="d-flex justify-content-end">
-                <button type="button" type="submit" class="btn btn-primary" id="add-regata-submit" >Aggiungi</button>
+                <button type="button" type="submit" class="btn btn-primary" id="add-regata-submit">Aggiungi</button>
             </div>
         </form>
     </div>
 </body>
 
 </html>
+<script>
+    let proto = document.getElementById('collapseProto'); 
+    document.getElementById('flexSwitchProto').addEventListener('click', () => collapse("Proto"));
+
+    let serie = document.getElementById('collapseSerie');
+    document.getElementById('flexSwitchSerie').addEventListener('click', () => collapse("Serie"));
+
+    function collapse(name) {
+        let el;
+        switch (name) {
+            case 'Serie':
+                el = serie;
+                break;
+            case 'Proto':
+                el = proto;
+                break;
+            default:
+                return;
+        }
+
+        if (el.classList.contains('show')) {
+            el.classList.remove('show');
+        }
+        else {
+            el.classList.add('show');
+        }
+    }
+</script>
