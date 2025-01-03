@@ -31,7 +31,7 @@ pub fn run() {
             add_soloSerie,
             add_doubleSerie,
             add_doubleProto,
-            new_window
+            edit_regata_window
         ])
         .setup(|app| {
             tauri::async_runtime::block_on(async move {
@@ -45,16 +45,17 @@ pub fn run() {
 }
 
 #[tauri::command]
-fn new_window(app: AppHandle) -> tauri::Result<()> {
+fn edit_regata_window(app: AppHandle) -> tauri::Result<()> {
     let len = app.webview_windows().len();
- 
+
     WebviewWindowBuilder::new(
         &app,
         format!("window-{}", len),
         WebviewUrl::App("edit-regata.html".into()),
     )
+    .title("Modifica Regata")
     .build()?;
- 
+
     Ok(())
 }
 

@@ -3,7 +3,7 @@ import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 
 
 export function addRegata() {
-    invoke('new_window')
+    invoke('edit_regata_window')
     // const webview = new WebviewWindow('edit-race', {
     //     url: './edit-regata.html',
     //     title: "Aggiungi Regata"
