@@ -5,6 +5,9 @@ use dbInterfaces::{
     add_doubleProto, add_doubleSerie, add_race, add_skipper, add_soloProto, add_soloSerie,
     get_races, get_skippers,
 };
+
+use XlsClassificationReader:: XlsClassRead;
+
 use sqlx::{migrate::MigrateDatabase, sqlite::SqlitePoolOptions, Pool, Sqlite};
 use std::convert::From;
 use tauri::{
@@ -13,6 +16,7 @@ use tauri::{
 };
 
 mod dbInterfaces;
+mod XlsClassificationReader;
 
 type Db = Pool<Sqlite>;
 
@@ -23,6 +27,7 @@ struct AppState {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
             add_race,
@@ -35,7 +40,8 @@ pub fn run() {
             add_doubleSerie,
             add_doubleProto,
             edit_regata_window,
-            sync_webviews
+            sync_webviews,
+            XlsClassRead
         ])
         .setup(|app| {
             tauri::async_runtime::block_on(async move {

@@ -1,4 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
+import { open } from '@tauri-apps/plugin-dialog';
 
 async function onSubmit() {
     const RaceName = document.getElementById("RaceName") as HTMLInputElement;
@@ -35,13 +36,43 @@ async function onSubmit() {
         d
     });
 
-    alert(raceId);
-    
-
     await invoke("sync_webviews");
-    alert("ciao")
 }
 
+async function SelectFile() {
+    const file = await open({
+        multiple: false,
+        directory: false,
+    });
+
+    await invoke("XlsClassRead", {
+        path: file
+    });
+
+    return file;
+}
+
+
+
 window.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("SerieFileSelect")?.addEventListener("click", async () => {
+        let SerieFileError = "";
+        try {
+            await SelectFile()
+        } catch (err: any) {
+            SerieFileError = err;
+        }
+        document.getElementById("SerieFileError")?.setHTMLUnsafe(SerieFileError);
+    });
+    document.getElementById("ProtoFileSelect")?.addEventListener("click", async () => {
+        let ProtoFileError = "";
+        try {
+            await SelectFile()
+        } catch (err: any) {
+            ProtoFileError = err;
+        }
+        document.getElementById("ProtoFileError")?.setHTMLUnsafe(ProtoFileError);
+    });
+
     document.getElementById("add-regata-submit")?.addEventListener("click", onSubmit)
 });
