@@ -6,15 +6,29 @@ import fs from 'fs';
 import path from 'path';
 import nunjucks from 'nunjucks';
 
-function NunjucksPlugin() {
+// function NunjucksPlugin() {
+//   return {
+//     name: 'vite-plugin-nunjucks',
+//     transformIndexHtml(html) {
+//       const templatePath = path.resolve(__dirname, 'index.html');
+//       const template = fs.readFileSync(templatePath, 'utf-8');
+//       const renderedHtml = nunjucks.renderString(template);
+//       return renderedHtml;
+//     },
+//   };
+// }
+
+
+function vitePluginNunjucks() {
   return {
     name: 'vite-plugin-nunjucks',
     transformIndexHtml(html) {
-      const templatePath = path.resolve(__dirname, 'index.html');
-      const template = fs.readFileSync(templatePath, 'utf-8');
-      const renderedHtml = nunjucks.renderString(template);
-      return renderedHtml;
-    },
+        // Inizializza Nunjucks
+        const env = nunjucks.configure('src/templates', { autoescape: true });
+
+        // Renderizza il template Nunjucks
+        return env.renderString(html);
+      },
   };
 }
 
@@ -41,6 +55,7 @@ export default defineConfig(async () => ({
       // 3. tell vite to ignore watching `src-tauri`
       ignored: ["**/src-tauri/**"],
     },
-  }, plugins: [NunjucksPlugin()],
+  }, 
+  plugins: [vitePluginNunjucks()],
 
 }));

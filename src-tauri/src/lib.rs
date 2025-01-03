@@ -7,7 +7,7 @@ use dbInterfaces::{
 };
 use sqlx::{migrate::MigrateDatabase, sqlite::SqlitePoolOptions, Pool, Sqlite};
 use std::convert::From;
-use tauri::{App, Emitter, Manager as _};
+use tauri::{App, AppHandle, Emitter, Manager as _, WebviewUrl, WebviewWindowBuilder};
 
 mod dbInterfaces;
 
@@ -30,7 +30,8 @@ pub fn run() {
             add_soloProto,
             add_soloSerie,
             add_doubleSerie,
-            add_doubleProto
+            add_doubleProto,
+            new_window
         ])
         .setup(|app| {
             tauri::async_runtime::block_on(async move {
@@ -43,6 +44,19 @@ pub fn run() {
         .expect("error while running tauri application");
 }
 
+#[tauri::command]
+fn new_window(app: AppHandle) -> tauri::Result<()> {
+    let len = app.webview_windows().len();
+ 
+    WebviewWindowBuilder::new(
+        &app,
+        format!("window-{}", len),
+        WebviewUrl::App("edit-regata.html".into()),
+    )
+    .build()?;
+ 
+    Ok(())
+}
 
 async fn setup_db(app: &App) -> Db {
     let mut path = app.path().app_data_dir().expect("failed to get data_dir");
