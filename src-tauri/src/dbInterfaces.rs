@@ -37,9 +37,9 @@ struct RaceDTO {
 
 #[derive(Debug, Serialize, Deserialize, FromRow)]
 pub struct Skipper {
-    skipperId: i32,
-    name: String,
-    surname: String,
+    pub skipperId: i32,
+    pub name: String,
+    pub surname: String,
 }
 
 impl From<RaceDTO> for Race {
