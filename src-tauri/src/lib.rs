@@ -6,7 +6,7 @@ use dbInterfaces::{
     get_races, get_skippers,
 };
 
-use XlsClassificationReader:: XlsClassRead;
+use XlsClassificationReader:: XlsClassReadCeck;
 
 use sqlx::{migrate::MigrateDatabase, sqlite::SqlitePoolOptions, Pool, Sqlite};
 use std::convert::From;
@@ -41,7 +41,7 @@ pub fn run() {
             add_doubleProto,
             edit_regata_window,
             sync_webviews,
-            XlsClassRead
+            XlsClassReadCeck
         ])
         .setup(|app| {
             tauri::async_runtime::block_on(async move {

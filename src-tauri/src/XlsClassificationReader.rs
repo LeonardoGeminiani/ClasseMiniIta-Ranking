@@ -1,8 +1,10 @@
 use calamine::{open_workbook, Reader, Xlsx};
 use tauri::AppHandle;
 
+use crate::dbInterfaces::CrewCoef;
+
 #[tauri::command]
-pub fn XlsClassRead(path: &str) -> Result<(), String> {
+pub fn XlsClassReadCeck(path: &str, e: CrewCoef) -> Result<(), String> {
     use calamine::{open_workbook, Reader, Xlsx};
 
     let mut excel: Xlsx<_> = open_workbook(path).expect("failed to find file");

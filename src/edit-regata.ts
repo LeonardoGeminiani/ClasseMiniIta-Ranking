@@ -7,6 +7,9 @@ async function onSubmit() {
     const E = document.getElementById("E") as HTMLSelectElement;
     const D = document.getElementById("D") as HTMLSelectElement;
 
+    const ifSerie = (document.getElementById("flexSwitchSerie") as HTMLInputElement).checked;
+    const ifProto = (document.getElementById("flexSwitchProto") as HTMLInputElement).checked;
+
     let name = RaceName.value.trim();
     let n = Number(N.value);
 
@@ -29,6 +32,45 @@ async function onSubmit() {
 
     if (haserror) return;
 
+    // TODO: error handling with colors
+    if (!ifSerie && !ifProto) return;
+
+    if (ifSerie) {
+        if(SerieFile === "") {
+            document.getElementById("SerieFileError")?.setHTMLUnsafe("File required");
+            return;
+        }
+
+        try {
+            await invoke("XlsClassReadCeck", {
+                path: SerieFile,
+                e: e
+            })
+            document.getElementById("SerieFileError")?.setHTMLUnsafe("");
+        } catch (e: any) {
+            document.getElementById("SerieFileError")?.setHTMLUnsafe(e);
+            return;
+        }
+    }
+
+    if (ifProto) {
+        if(ProtoFile === "") {
+            document.getElementById("ProtoFileError")?.setHTMLUnsafe("File required");
+            return;
+        }
+
+        try {
+            await invoke("XlsClassReadCeck", {
+                path: ProtoFile,
+                e: e
+            })
+            document.getElementById("ProtoFileError")?.setHTMLUnsafe("");
+        } catch (e: any) {
+            document.getElementById("ProtoFileError")?.setHTMLUnsafe(e);
+            return;
+        }
+    }
+
     let raceId: number = await invoke("add_race", {
         name,
         n,
@@ -39,39 +81,27 @@ async function onSubmit() {
     await invoke("sync_webviews");
 }
 
-async function SelectFile() {
+async function SelectFile(): Promise<string> {
     const file = await open({
         multiple: false,
         directory: false,
     });
 
-    await invoke("XlsClassRead", {
-        path: file
-    });
-
+    if (file === null) return "";
     return file;
 }
 
-
+let SerieFile: string = "";
+let ProtoFile: string = "";
 
 window.addEventListener("DOMContentLoaded", () => {
     document.getElementById("SerieFileSelect")?.addEventListener("click", async () => {
-        let SerieFileError = "";
-        try {
-            await SelectFile()
-        } catch (err: any) {
-            SerieFileError = err;
-        }
-        document.getElementById("SerieFileError")?.setHTMLUnsafe(SerieFileError);
+        SerieFile = await SelectFile();
+        document.getElementById("SerieFile")?.setHTMLUnsafe(SerieFile);
     });
     document.getElementById("ProtoFileSelect")?.addEventListener("click", async () => {
-        let ProtoFileError = "";
-        try {
-            await SelectFile()
-        } catch (err: any) {
-            ProtoFileError = err;
-        }
-        document.getElementById("ProtoFileError")?.setHTMLUnsafe(ProtoFileError);
+        ProtoFile = await SelectFile();
+        document.getElementById("ProtoFile")?.setHTMLUnsafe(ProtoFile);
     });
 
     document.getElementById("add-regata-submit")?.addEventListener("click", onSubmit)
